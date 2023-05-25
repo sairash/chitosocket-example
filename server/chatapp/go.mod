@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/gobwas/ws v1.2.0
 	github.com/labstack/echo/v4 v4.10.2
-	github.com/sairash/chitosocket v0.2.0
+	github.com/sairash/chitosocket v0.2.1
 	golang.org/x/sys v0.8.0
 )
 
