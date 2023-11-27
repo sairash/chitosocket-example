@@ -26,17 +26,19 @@ func main() {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
 
-	chitosocket.On["message"] = func(subs *chitosocket.Subscriber, op ws.OpCode, data map[string]interface{}) {
-		length_of_room := len(subs.Room)
+	chitosocket.On["message"] = func(subs **chitosocket.Subscriber, op ws.OpCode, data map[string]interface{}) {
+		sub := *subs
+		length_of_room := len(sub.Room)
 		if length_of_room > 0 {
-			room := subs.Room[length_of_room-1]
+			room := sub.Room[length_of_room-1]
 			chitosocket.Emit("message", room, op, data)
 		}
 	}
 
-	chitosocket.On["add_to_room"] = func(subs *chitosocket.Subscriber, op ws.OpCode, data map[string]interface{}) {
+	chitosocket.On["add_to_room"] = func(subs **chitosocket.Subscriber, op ws.OpCode, data map[string]interface{}) {
+		sub := *subs
 		if data["room_id"] != nil {
-			subs.AddToRoom(data["room_id"].(string))
+			sub.AddToRoom(data["room_id"].(string))
 			chitosocket.Emit("room_event", []string{data["room_id"].(string)}, op, map[string]interface{}{"user_id": data["user_id"], "message": "New user just joined the room "})
 		}
 	}
