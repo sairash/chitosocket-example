@@ -26,6 +26,11 @@ func main() {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
 
+	e.GET("/:id", func(c echo.Context) error {
+		id := c.Param("id")
+		return c.JSON(http.StatusOK, chitosocket.Hub.Subs[id])
+	})
+
 	chitosocket.On["message"] = func(subs **chitosocket.Subscriber, op ws.OpCode, data map[string]interface{}) {
 		sub := *subs
 		length_of_room := len(sub.Room)
